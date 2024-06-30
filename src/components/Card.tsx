@@ -1,5 +1,4 @@
 import React from "react";
-
 interface CardProps {
   id: number;
   name: string;
@@ -10,7 +9,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ id, name, image, flipped, onClick }) => {
   return (
-    <div className="w-24 h-32 m-2 perspective">
+    <div className="w-36 h-48 m-2 perspective">
       <div
         className={`relative w-full h-full transition-transform duration-500 transform ${
           flipped ? "rotate-y-180" : ""
@@ -21,11 +20,15 @@ const Card: React.FC<CardProps> = ({ id, name, image, flipped, onClick }) => {
           <img src={image} alt={name} className="w-full h-full object-cover rounded-lg" />
         </div>
         <div
-          className={`absolute w-full h-full bg-blue-500 text-white flex justify-center items-center  transform rotate-y-180 rounded-lg ${
-            flipped ? "backface-hidden" : ""
+          className={`absolute w-full h-full bg-blue-500 text-white flex justify-center items-center  transform  rounded-lg ${
+            flipped ? "backface-hidden rotate-y-180" : ""
           }`}
         >
-          <span className="text-xl">?</span>
+          <img
+            src="https://pnghq.com/wp-content/uploads/rick-and-morty-logo-png-png-graphic-download-72914-1536x1536.png"
+            alt="defaul_img"
+            className="w-32 h-32 object-cover rounded-lg"
+          />
         </div>
       </div>
     </div>

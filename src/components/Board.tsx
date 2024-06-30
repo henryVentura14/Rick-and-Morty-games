@@ -3,12 +3,17 @@ import { useAppSelector, useAppDispatch } from '../hooks/reduxDispatch';
 import Card from './Card';
 import { fetchCharactersAsync } from '../features/game/gameSlice';
 
-const Board: React.FC = () => {
+interface BoardProps {
+  gridSize: number;
+  currentPlayer: string;
+}
+
+const Board: React.FC<BoardProps> = ({ gridSize, currentPlayer }) => {
   const dispatch = useAppDispatch();
   const characters = useAppSelector((state) => state.game.characters);
-  const [cards, setCards] = useState<Array<any>>([]);
-  const [flippedCards, setFlippedCards] = useState<Array<number>>([]);
-  const [matchedCards, setMatchedCards] = useState<Array<number>>([]);
+  const [cards, setCards] = useState<any[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [matchedCards, setMatchedCards] = useState<number[]>([]);
 
   useEffect(() => {
     dispatch(fetchCharactersAsync());
@@ -42,9 +47,9 @@ const Board: React.FC = () => {
       }, 1000);
     }
   };
-
+  console.log(gridSize, cards, flippedCards, matchedCards, currentPlayer);
   return (
-    <div className="grid grid-cols-4 gap-4 p-4">
+    <div className={`grid grid-cols-${gridSize} gap-4 p-4`}>
       {cards.map((card) => (
         <Card
           key={card.id}
@@ -55,6 +60,10 @@ const Board: React.FC = () => {
           onClick={() => handleCardClick(card.id)}
         />
       ))}
+      <div className="mt-4">
+        <p>Current Player: {currentPlayer}</p>
+        <p>Matched Pairs: {matchedCards.length / 2}</p>
+      </div>
     </div>
   );
 };
