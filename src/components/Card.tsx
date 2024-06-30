@@ -1,0 +1,35 @@
+import React from "react";
+
+interface CardProps {
+  id: number;
+  name: string;
+  image: string;
+  flipped: boolean;
+  onClick: () => void;
+}
+
+const Card: React.FC<CardProps> = ({ id, name, image, flipped, onClick }) => {
+  return (
+    <div className="w-24 h-32 m-2 perspective">
+      <div
+        className={`relative w-full h-full transition-transform duration-500 transform ${
+          flipped ? "rotate-y-180" : ""
+        }`}
+        onClick={onClick}
+      >
+        <div className={`absolute w-full h-full backface-hidden ${flipped ? "" : "backface-hidden"}`}>
+          <img src={image} alt={name} className="w-full h-full object-cover rounded-lg" />
+        </div>
+        <div
+          className={`absolute w-full h-full bg-blue-500 text-white flex justify-center items-center  transform rotate-y-180 rounded-lg ${
+            flipped ? "backface-hidden" : ""
+          }`}
+        >
+          <span className="text-xl">?</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Card;
