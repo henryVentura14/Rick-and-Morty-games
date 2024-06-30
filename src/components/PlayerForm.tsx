@@ -1,15 +1,12 @@
-// components/Formulario.tsx
-
 import React, { useState } from "react";
 
 interface FormularioProps {
-  onStartGame: (player1: string, player2: string, gridSize: number) => void;
+  onStartGame: (player1: string, player2: string) => void;
 }
 
 const PayerForm: React.FC<FormularioProps> = ({ onStartGame }) => {
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
-  const [gridSize, setGridSize] = useState(4);
 
   const handleStartGame = () => {
     if (player1.trim() === "" || player2.trim() === "") {
@@ -17,7 +14,7 @@ const PayerForm: React.FC<FormularioProps> = ({ onStartGame }) => {
       return;
     }
 
-    onStartGame(player1, player2, gridSize);
+    onStartGame(player1, player2);
   };
 
   return (
@@ -32,6 +29,7 @@ const PayerForm: React.FC<FormularioProps> = ({ onStartGame }) => {
           id="player1"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           value={player1}
+          placeholder="Henry"
           onChange={(e) => setPlayer1(e.target.value)}
         />
       </div>
@@ -44,6 +42,7 @@ const PayerForm: React.FC<FormularioProps> = ({ onStartGame }) => {
           id="player2"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           value={player2}
+          placeholder="Jahaziel"
           onChange={(e) => setPlayer2(e.target.value)}
         />
       </div>
