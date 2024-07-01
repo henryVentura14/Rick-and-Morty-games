@@ -1,32 +1,26 @@
-import React, { useState } from "react";
-import PlayerForm from "./components/PlayerForm";
-import Board from "./components/Board";
-import "./App.css";
-const App: React.FC = () => {
-  const [player1, setPlayer1] = useState("");
-  const [player2, setPlayer2] = useState("");
+// src/App.tsx
+import React, {useState} from 'react';
+import { GameProvider } from './context/GameContext';
+import Board from './components/Board/Board';
+import PlayerForm from './components/PlayerForm/PlayerForm';
 
-  const handleStartGame = (player1Name: string, player2Name: string) => {
-    setPlayer1(player1Name);
-    setPlayer2(player2Name);
+const App: React.FC = () => {
+  const [players, setPlayers] = useState<{ player1: string; player2: string } | null>(null);
+
+  const handleStartGame = (player1: string, player2: string) => {
+    setPlayers({ player1, player2 });
   };
 
   return (
-    <div className="bg-img">
-      <div className="container mx-auto mt-8 px-4">
-        <h1 className="text-3xl font-bold mb-4 text-white">Memory Game</h1>
-        {!player1 || !player2 ? (
-          <PlayerForm onStartGame={handleStartGame} />
+    <GameProvider>
+      <div className="App">
+        {players ? (
+          <Board playerName1={players.player1} playerName2={players.player2} />
         ) : (
-          <div>
-            <Board
-              playerName1={player1}
-              playerName2={player2}
-            />
-          </div>
+          <PlayerForm onStartGame={handleStartGame} />
         )}
       </div>
-    </div>
+    </GameProvider>
   );
 };
 

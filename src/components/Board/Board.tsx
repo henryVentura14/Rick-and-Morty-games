@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../hooks/reduxDispatch';
-import Card from './Card';
-import { fetchCharactersAsync } from '../features/game/gameSlice';
-import Scoreboard from './Scoreboard';
+import { useGame } from '../../context/GameContext';
+import Card from '../Card/Card';
+import Scoreboard from '../Scoreboard/Scoreboard';
 
 interface BoardProps {
   playerName1: string;
@@ -10,18 +9,11 @@ interface BoardProps {
 }
 
 const Board: React.FC<BoardProps> = ({ playerName1, playerName2 }) => {
-  const dispatch = useAppDispatch();
-  const characters = useAppSelector((state) => state.game.characters);
+  const { state, dispatch } = useGame();
+  const { characters, turn, player1Pairs, player2Pairs } = state;
   const [cards, setCards] = useState<any[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [matchedCards, setMatchedCards] = useState<number[]>([]);
-  const [turn, setTurn] = useState<number>(1);
-  const [player1Pairs, setPlayer1Pairs] = useState<number>(0);
-  const [player2Pairs, setPlayer2Pairs] = useState<number>(0);
-
-  useEffect(() => {
-    dispatch(fetchCharactersAsync());
-  }, [dispatch]);
 
   useEffect(() => {
     if (characters.length) {
@@ -44,18 +36,13 @@ const Board: React.FC<BoardProps> = ({ playerName1, playerName2 }) => {
 
       if (firstCard.name === secondCard.name) {
         setMatchedCards((prev) => [...prev, flippedCards[0], id]);
-        
-        if (turn === 1) {
-          setPlayer1Pairs((prev) => prev + 1);
-        } else {
-          setPlayer2Pairs((prev) => prev + 1);
-        }
+        dispatch({ type: 'ADD_PAIR', payload: turn === 1 ? 'player1' : 'player2' });
       }
 
       setTimeout(() => {
         setFlippedCards([]);
         if (firstCard.name !== secondCard.name) {
-          setTurn((prevTurn) => (prevTurn === 1 ? 2 : 1));
+          dispatch({ type: 'TOGGLE_TURN' });
         }
       }, 1000);
     }
